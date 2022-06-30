@@ -148,6 +148,8 @@ def create_sp3_table():
 
           final_df = sp3_table(df = SP3, rev = rev)
           return final_df.to_csv().encode('utf-8')
+      else:
+        st.write('Please upload a excel file)
 
 # blue #0C1B2A
 # orange #F6931D
