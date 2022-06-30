@@ -147,7 +147,7 @@ def create_sp3_table():
           rev = OrderedDict(reversed(list(same_col.items())))
 
           final_df = sp3_table(df = SP3, rev = rev)
-     return final_df.to_csv().encode('utf-8')
+          return final_df.to_csv().encode('utf-8')
 
 # blue #0C1B2A
 # orange #F6931D
