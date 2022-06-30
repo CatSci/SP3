@@ -134,8 +134,7 @@ def create_sp3_table():
     if uploaded_file is not None:
       wb = openpyxl.load_workbook(uploaded_file)
       sheets = wb.sheetnames
-      df = pd.read-excel(uploaded_file)
-      st.write(df)
+        
       rt_list = read_rt(uploaded_file, sheets)
       rt_list.sort()
       SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
