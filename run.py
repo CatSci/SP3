@@ -5,7 +5,7 @@ from collections import OrderedDict
 import math
 import openpyxl
 
-
+st.markdown('**Note - Please do not post target or intermediate structure information externally**.')
 st.write('# SP3 Table')
 
 def read_rt(file, sheet_name):
