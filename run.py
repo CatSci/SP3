@@ -4,6 +4,10 @@ import numpy as np
 from collections import OrderedDict
 import math
 import openpyxl
+import plotly.express as px
+import plotly.graph_objects as go
+
+from utils import chromotogram_data, bubble_plot, bubble_figure_data
 
 st.markdown('**Note - Please do not post target or intermediate structure information externally**.')
 st.title('SP3 Table')
@@ -151,6 +155,30 @@ def create_sp3_table():
       return final_df.to_csv().encode('utf-8')
     
 
+def create_sp3_table():   
+     if uploaded_file is not None:
+          wb = openpyxl.load_workbook(uploaded_file)
+          sheets = wb.sheetnames
+
+          rt_list = read_rt(uploaded_file, sheets)
+          rt_list.sort()
+          SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
+          
+          SP3 = fill_rrt(uploaded_file, sheets, df = SP3)
+          # call add_data
+          SP3 = add_data(uploaded_file, sheets, dataframe = SP3)
+
+          # call find same col
+          same_col = find_same_col(SP3)
+          rev = OrderedDict(reversed(list(same_col.items())))
+
+          final_df = sp3_table(df = SP3, rev = rev)
+          chromotogram_df = chromotogram_data(final_df)
+          bubble_df = bubble_plot(final_df)
+
+     return final_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
+
+
 # blue #0C1B2A
 # orange #F6931D
 
@@ -170,14 +198,24 @@ div.stButton > button:first-child {
 </style>""", unsafe_allow_html=True)
 
 if st.button('Create SP3 Table'):
-     csv = create_sp3_table()
-     st.download_button(
+    sp3, chromotogram_df, bubble_df = create_sp3_table()
+    st.download_button(
      label="Download SP3 Table as CSV",
-     data=csv,
+     data=sp3,
      file_name='sp3_table.csv',
-     mime='text/csv',
-     
- )
+     mime='text/csv',)
+
+    # chromotogram plot
+    st.header('Chromatogram Plot')
+    chromo_fig = px.line(chromotogram_df, x="RRT", y= chromotogram_df.iloc[:, -1], markers = True, range_y = [0, 100])
+    st.plotly_chart(chromo_fig)
+
+    # bubble plot
+    figure_data = bubble_figure_data(bubble_df)
+    bubble_fig = go.Figure(data = figure_data)
+
+    st.header('Bubble Chart')
+    st.plotly_chart(bubble_fig, x = 'RRT')
 
 
 
