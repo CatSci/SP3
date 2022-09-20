@@ -7,7 +7,7 @@ import openpyxl
 import plotly.express as px
 import plotly.graph_objects as go
 
-from utils import chromotogram_data, bubble_plot, bubble_figure_data
+from utils import chromotogram_data, bubble_plot, bubble_figure_data, rearrange_data
 
 st.markdown('**Note - Please do not post target or intermediate structure information externally**.')
 st.title('SP3 Table')
@@ -173,12 +173,13 @@ def create_sp3_table():
           rev = OrderedDict(reversed(list(same_col.items())))
 
           final_df = sp3_table(df = SP3, rev = rev)
-          sp3_table_df, chromotogram_df = chromotogram_data(final_df)
+          rearrange_df = rearrange_data(final_df)
+          chromotogram_df = chromotogram_data(rearrange_df)
           bubble_df = bubble_plot(final_df)
 
-          st.write(sp3_table_df)
+          st.write(rearrange_df)
 
-     return sp3_table_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
+     return rearrange_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
 
 
 # blue #0C1B2A
