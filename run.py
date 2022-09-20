@@ -176,6 +176,8 @@ def create_sp3_table():
           sp3_table_df, chromotogram_df = chromotogram_data(final_df)
           bubble_df = bubble_plot(final_df)
 
+          st.write(sp3_table_df)
+
      return sp3_table_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
 
 
