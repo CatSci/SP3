@@ -133,26 +133,26 @@ def fill_rrt(file, sheets, df):
 
 uploaded_file = st.file_uploader("Choose a file")
 
-def create_sp3_table(): 
+# def create_sp3_table(): 
     
-    if uploaded_file is not None:
-      wb = openpyxl.load_workbook(uploaded_file)
-      sheets = wb.sheetnames
+#     if uploaded_file is not None:
+#       wb = openpyxl.load_workbook(uploaded_file)
+#       sheets = wb.sheetnames
         
-      rt_list = read_rt(uploaded_file, sheets)
-      rt_list.sort()
-      SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
+#       rt_list = read_rt(uploaded_file, sheets)
+#       rt_list.sort()
+#       SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
 
-      SP3 = fill_rrt(uploaded_file, sheets, df = SP3)
-      # call add_data
-      SP3 = add_data(uploaded_file, sheets, dataframe = SP3)
+#       SP3 = fill_rrt(uploaded_file, sheets, df = SP3)
+#       # call add_data
+#       SP3 = add_data(uploaded_file, sheets, dataframe = SP3)
 
-      # call find same col
-      same_col = find_same_col(SP3)
-      rev = OrderedDict(reversed(list(same_col.items())))
+#       # call find same col
+#       same_col = find_same_col(SP3)
+#       rev = OrderedDict(reversed(list(same_col.items())))
 
-      final_df = sp3_table(df = SP3, rev = rev)
-      return final_df.to_csv().encode('utf-8')
+#       final_df = sp3_table(df = SP3, rev = rev)
+#       return final_df.to_csv().encode('utf-8')
     
 
 def create_sp3_table():   
@@ -173,10 +173,10 @@ def create_sp3_table():
           rev = OrderedDict(reversed(list(same_col.items())))
 
           final_df = sp3_table(df = SP3, rev = rev)
-          chromotogram_df = chromotogram_data(final_df)
+          sp3_table_df, chromotogram_df = chromotogram_data(final_df)
           bubble_df = bubble_plot(final_df)
 
-     return final_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
+     return sp3_table_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df
 
 
 # blue #0C1B2A
