@@ -106,16 +106,15 @@ def fill_rt_rrt(extra_row_df):
 
 
 
-def chromotogram_data(rearrange_df):
-    # f = process_data(df)
-    # final_df = drop_same_rows(f)
-    # sp3_table_df = rearrange_data(final_df)
-
-    g = fill_max(rearrange_df)
+def chromotogram_data(df):
+    f = process_data(df)
+    final_df = drop_same_rows(f)
+    sp3_table_df = rearrange_data(final_df)
+    g = fill_max(sp3_table_df)
     extra_row_df = add_extra_rows(g)
     chromotogram_df = fill_rt_rrt(extra_row_df)
 
-    return chromotogram_df
+    return sp3_table_df , chromotogram_df
 
 
 
