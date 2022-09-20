@@ -176,7 +176,7 @@ def bubble_figure_data(d):
     colors = ['red', 'blue', 'green', 'purple', 'grey', 'cyan', 'brown']
 
     for i in range(const_col):
-        x = px.scatter(d, x="RRT", y= d.iloc[:, 2 + const_col + i], size = d.iloc[:, i + 2].to_list(), log_x=True, size_max=50)
+        x = px.scatter(d, x="RRT", y= d.iloc[:, 2 + const_col + i], size = d.iloc[:, i + 2].to_list(), log_x=True, size_max=50,)
         x.update_traces(marker=dict(color= colors[i]))
 
         figures.append(x)
