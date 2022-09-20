@@ -215,7 +215,7 @@ if st.button('Create SP3 Table'):
     bubble_fig = go.Figure(data = figure_data)
     bubble_fig.update_layout(xaxis_title="RRT", yaxis_title="Sample number")
 
-    st.header('Peak Map')
+    st.header('Ineractive Peak Map')
     st.plotly_chart(bubble_fig, x = 'RRT')
 
 
