@@ -206,15 +206,15 @@ if st.button('Create SP3 Table'):
      mime='text/csv',)
 
     # chromotogram plot
-    st.header('Chromatogram Plot')
-    chromo_fig = px.line(chromotogram_df, x="RRT", y= chromotogram_df.iloc[:, -1], markers = True, range_y = [0, 100])
-    st.plotly_chart(chromo_fig)
+    # st.header('Chromatogram Plot')
+    # chromo_fig = px.line(chromotogram_df, x="RRT", y= chromotogram_df.iloc[:, -1], markers = True, range_y = [0, 100])
+    # st.plotly_chart(chromo_fig)
 
     # bubble plot
     figure_data = bubble_figure_data(bubble_df)
     bubble_fig = go.Figure(data = figure_data)
 
-    st.header('Bubble Chart')
+    st.header('Peak Map')
     st.plotly_chart(bubble_fig, x = 'RRT')
 
 
