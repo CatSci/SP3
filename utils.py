@@ -29,9 +29,7 @@ def drop_same_rows(dataframe):
     return final_df
 
 
-def rearrange_data(df):
-    f = process_data(df)
-    final_df = drop_same_rows(f)
+def rearrange_data(final_df):
     final_df = final_df.T
     final_df.reset_index(inplace = True)
     final_df.columns = range(final_df.columns.size)
@@ -103,7 +101,7 @@ def fill_rt_rrt(extra_row_df):
     return extra_row_df
 
 
-
+# rearrange_df = rearrange_data()
 
 
 def chromotogram_data(df):
