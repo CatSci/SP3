@@ -103,16 +103,20 @@ def fill_rt_rrt(extra_row_df):
 
 # rearrange_df = rearrange_data()
 
+def convert_to_sp3(dataframe):
+    dataframe = dataframe.T
+    return dataframe
 
 def chromotogram_data(df):
     f = process_data(df)
     final_df = drop_same_rows(f)
+    temp_sp3 = convert_to_sp3(final_df)
     sp3_table_df = rearrange_data(final_df)
     g = fill_max(sp3_table_df)
     extra_row_df = add_extra_rows(g)
     chromotogram_df = fill_rt_rrt(extra_row_df)
 
-    return sp3_table_df , chromotogram_df
+    return temp_sp3 , chromotogram_df
 
 
 
