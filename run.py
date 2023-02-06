@@ -31,13 +31,23 @@ def add_data(file, sheets, dataframe):
 
     add data from different screen reaction time
     """
+    
     for i in sheets:
         d = pd.read_excel(file, sheet_name = i)
-
         dataframe[i] = pd.DataFrame([[np.nan]], index = dataframe.index)
+        # st.write(i)
+        # st.write(dataframe)
         for idx, val in d.iterrows():
             area, rt_val = val['Total Area %'], val['RT']
-            dataframe.at[dataframe.index[dataframe.RT == rt_val].tolist(), i] = area
+            # st.write(area)
+            # st.write(rt_val)
+            # index = dataframe.index[dataframe.RT == rt_val].tolist()
+            # st.write(index[0])
+            # dataframe.loc[index, i] = area
+            # st.write(dataframe)
+            # st.write(dataframe.index[dataframe.RT == rt_val].tolist(), str(i))
+            dataframe.at[dataframe.index[dataframe.RT == rt_val].tolist()[0], str(i)] = area
+            # st.write(dataframe)
     
     transpose_sp3 = dataframe.T
     transpose_sp3.reset_index(inplace=True)

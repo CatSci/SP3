@@ -19,13 +19,14 @@ def read_rt(file, sheet_name):
     return rt
 
 def add_data(file, sheets, dataframe):
+    st.write('sp3 file')
     for i in sheets:
         d = pd.read_excel(file, sheet_name = i)
 
         dataframe[i] = pd.DataFrame([[np.nan]], index = dataframe.index)
         for idx, val in d.iterrows():
             area, rt_val = val['Total Area %'], val['RT']
-            dataframe.at[dataframe.index[dataframe.RT == rt_val].tolist(), i] = area
+            dataframe.at[dataframe.index[dataframe.RT == rt_val].tolist()[0], i] = area
     
     transpose_sp3 = dataframe.T
     transpose_sp3.reset_index(inplace=True)
