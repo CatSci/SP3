@@ -22,6 +22,7 @@ def drop_same_rows(dataframe):
     x = sort_df[rrt_one]
     ids = x.index.values.tolist ()
     x = x.iloc[:, -3:]
+    x = x.apply(pd.to_numeric)
     max_idx = x.mean(axis = 1).idxmax()
     ids_to_drop = [i for i in ids if i != max_idx]
     final_df = sort_df.drop(index = ids_to_drop)
