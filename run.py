@@ -62,7 +62,7 @@ div.stButton > button:first-child:focus {
 }
 </style>""", unsafe_allow_html=True)
 
-st.markdown('**Note - Please do not post target or intermediate structure information externally**.')
+st.info('**Note - Please do not post target or intermediate structure information externally**.')
 st.title('SP3 Table')
 
 def read_rt(file, sheet_name):
