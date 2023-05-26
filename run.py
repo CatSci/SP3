@@ -7,6 +7,7 @@ import openpyxl
 import plotly.express as px
 import plotly.graph_objects as go
 from io import BytesIO
+import xlsxwriter
 
 
 from utils import chromotogram_data, bubble_plot, bubble_figure_data
@@ -242,25 +243,32 @@ def create_sp3_table():
         sp3_table_df, chromotogram_df = chromotogram_data(final_df)
         bubble_df = bubble_plot(final_df)
 
-    # Create in-memory Excel file
+    # Create Excel workbook and worksheet
         excel_file = BytesIO()
-        with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
-            final_df.to_excel(writer, sheet_name='SP3 Table', index=False)
-            sp3_table_df.to_excel(writer, sheet_name='SP3 Table Summary', index=False)
+        writer = pd.ExcelWriter(excel_file, engine='xlsxwriter')
+        workbook = writer.book
+        worksheet = workbook.add_worksheet('SP3 Table')
+        
+        # Write data to worksheet
+        for i, col in enumerate(final_df.columns):
+            worksheet.write(0, i, col)
+            for j, value in enumerate(final_df[col]):
+                worksheet.write(j + 1, i, value)
 
+        writer.save()
         excel_file.seek(0)
-
+        
         return (
             excel_file.getvalue(),
             chromotogram_df,
             bubble_df,
-            # final_df.to_excel().getvalue()
+            final_df.to_csv().encode('utf-8')
         )
 
 
 
 if st.button('Create SP3 Table'):
-    sp3, chromotogram_df, bubble_df = create_sp3_table()
+    sp3, chromotogram_df, bubble_df, final_df = create_sp3_table()
     st.download_button(
         label="Download SP3 Table as Excel",
         data=sp3,
