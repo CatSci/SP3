@@ -7,7 +7,7 @@ import openpyxl
 import plotly.express as px
 import plotly.graph_objects as go
 from io import BytesIO
-import xlsxwriter
+import openpyxl
 
 
 from utils import chromotogram_data, bubble_plot, bubble_figure_data
@@ -243,19 +243,9 @@ def create_sp3_table():
         sp3_table_df, chromotogram_df = chromotogram_data(final_df)
         bubble_df = bubble_plot(final_df)
 
-    # Create Excel workbook and worksheet
+    # Save DataFrame to Excel file
         excel_file = BytesIO()
-        writer = pd.ExcelWriter(excel_file, engine='xlsxwriter')
-        workbook = writer.book
-        worksheet = workbook.add_worksheet('SP3 Table')
-        
-        # Write data to worksheet
-        for i, col in enumerate(final_df.columns):
-            worksheet.write(0, i, col)
-            for j, value in enumerate(final_df[col]):
-                worksheet.write(j + 1, i, value)
-
-        writer.save()
+        final_df.to_excel(excel_file, index=False)
         excel_file.seek(0)
         
         return (
