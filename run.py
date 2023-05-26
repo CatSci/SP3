@@ -6,6 +6,8 @@ import math
 import openpyxl
 import plotly.express as px
 import plotly.graph_objects as go
+from io import BytesIO
+
 
 from utils import chromotogram_data, bubble_plot, bubble_figure_data
 
@@ -62,8 +64,9 @@ div.stButton > button:first-child:focus {
 }
 </style>""", unsafe_allow_html=True)
 
-st.info('**Note - Please do not post target or intermediate structure information externally**.')
+
 st.title('SP3 Table')
+st.info('Note - Please do not post target or intermediate structure information externally.')
 
 def read_rt(file, sheet_name):
     """Return a list
@@ -219,37 +222,51 @@ uploaded_file = st.file_uploader("Choose a file")
     
 
 def create_sp3_table():   
-     if uploaded_file is not None:
-          wb = openpyxl.load_workbook(uploaded_file)
-          sheets = wb.sheetnames
+    if uploaded_file is not None:
+        wb = openpyxl.load_workbook(uploaded_file)
+        sheets = wb.sheetnames
 
-          rt_list = read_rt(uploaded_file, sheets)
-          rt_list.sort()
-          SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
-          
-          SP3 = fill_rrt(uploaded_file, sheets, df = SP3)
-          # call add_data
-          SP3 = add_data(uploaded_file, sheets, dataframe = SP3)
+        rt_list = read_rt(uploaded_file, sheets)
+        rt_list.sort()
+        SP3 = pd.DataFrame({'RT' : rt_list, 'RRT': np.nan})
+        
+        SP3 = fill_rrt(uploaded_file, sheets, df = SP3)
+        # call add_data
+        SP3 = add_data(uploaded_file, sheets, dataframe = SP3)
 
-          # call find same col
-          same_col = find_same_col(SP3)
-          rev = OrderedDict(reversed(list(same_col.items())))
+        # call find same col
+        same_col = find_same_col(SP3)
+        rev = OrderedDict(reversed(list(same_col.items())))
 
-          final_df = sp3_table(df = SP3, rev = rev)
-          sp3_table_df, chromotogram_df = chromotogram_data(final_df)
-          bubble_df = bubble_plot(final_df)
+        final_df = sp3_table(df = SP3, rev = rev)
+        sp3_table_df, chromotogram_df = chromotogram_data(final_df)
+        bubble_df = bubble_plot(final_df)
 
-     return sp3_table_df.to_csv().encode('utf-8'), chromotogram_df, bubble_df, final_df.to_csv().encode('utf-8')
+    # Create in-memory Excel file
+        excel_file = BytesIO()
+        with pd.ExcelWriter(excel_file, engine='xlsxwriter') as writer:
+            final_df.to_excel(writer, sheet_name='SP3 Table', index=False)
+            sp3_table_df.to_excel(writer, sheet_name='SP3 Table Summary', index=False)
+
+        excel_file.seek(0)
+
+        return (
+            excel_file.getvalue(),
+            chromotogram_df,
+            bubble_df,
+            # final_df.to_excel().getvalue()
+        )
 
 
 
 if st.button('Create SP3 Table'):
-    sp3, chromotogram_df, bubble_df, final_df = create_sp3_table()
+    sp3, chromotogram_df, bubble_df = create_sp3_table()
     st.download_button(
-     label="Download SP3 Table as CSV",
-     data=final_df,
-     file_name='sp3_table.csv',
-     mime='text/csv',)
+        label="Download SP3 Table as Excel",
+        data=sp3,
+        file_name='sp3_table.xlsx',
+        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
     # chromotogram plot
     st.header('Chromatogram Plot')
